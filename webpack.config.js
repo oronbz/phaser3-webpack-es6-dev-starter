@@ -4,7 +4,8 @@ const webpack = require('webpack');
 
 module.exports = {
     entry: {
-        app: './src/index.js'
+        app: './src/index.js',
+        vendors: ['phaser']
     },
 
     output: {
@@ -36,11 +37,19 @@ module.exports = {
             {
                 from: path.resolve(__dirname, 'index.html'),
                 to: path.resolve(__dirname, 'build')
+            },
+            {
+                from: path.resolve(__dirname, 'assets', '**', '*'),
+                to: path.resolve(__dirname, 'build')
             }
         ]),
         new webpack.DefinePlugin({
             'typeof CANVAS_RENDERER': JSON.stringify(true),
             'typeof WEBGL_RENDERER': JSON.stringify(true)
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendors',
+            filename: 'vendors.bundle.js'
         })
     ]
 };
